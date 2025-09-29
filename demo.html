@@ -1,0 +1,2511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jharkhand Tourism - Smart Digital Platform</title>
+    <meta name="description" content="Discover the hidden treasures of Jharkhand with our smart tourism platform. Plan eco-friendly trips, explore tribal culture, and experience nature's beauty.">
+    <meta name="keywords" content="Jharkhand tourism, smart tourism, eco-friendly travel, tribal culture, waterfalls, wildlife, adventure">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        /* Page Load Animation - Only happens once */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+        }
+
+        .page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+            color: white;
+        }
+
+        .loader-logo {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            animation: logoFloat 2s ease-in-out infinite;
+        }
+
+        .loader-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ef4444);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        .loader-subtitle {
+            font-size: 1.2rem;
+            color: #e2e8f0;
+            margin-bottom: 3rem;
+            opacity: 0.8;
+        }
+
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(59, 130, 246, 0.3);
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 2rem;
+        }
+
+        .loader-progress {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .loader-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 2px;
+            animation: progressLoad 3s ease-out forwards;
+        }
+
+        .loader-text {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            animation: textFade 2s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes progressLoad {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes textFade {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Dark Theme UI Design for AI Assistant Platform */
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #8b5cf6;
+            --accent-color: #ef4444;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --dark-color: #0f172a;
+            --darker-color: #020617;
+            --light-color: #ffffff;
+            --bg-dark: #0f172a;
+            --bg-darker: #020617;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #ffffff;
+            --text-secondary: #e2e8f0;
+            --text-muted: #94a3b8;
+            --text-accent: #f1f5f9;
+            --border-color: #334155;
+            --border-light: #475569;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+            --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --gradient-secondary: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            --gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            --gradient-card: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+            --gradient-chat: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        body {
+            font-family: 'Inter', 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            background: var(--bg-dark);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            color: var(--text-primary);
+            font-weight: 600;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Minimal Animations and Transitions */
+        .btn {
+            transition: background-color 0.2s ease;
+        }
+
+        /* Modern Typography Enhancements */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 800;
+            color: var(--text-primary);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        p, span, div {
+            font-weight: 600;
+            color: var(--text-primary);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .lead {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Enhanced Interaction States */
+        .nav-link:active,
+        .nav-link:focus {
+            color: var(--text-primary) !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+            font-weight: 700;
+        }
+
+        .form-check-label:active,
+        .form-check-label:focus {
+            color: var(--text-primary) !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+            font-weight: 800;
+        }
+
+        .help-item:active,
+        .help-item:focus {
+            color: var(--text-primary) !important;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.8);
+            font-weight: 800;
+        }
+
+        /* Selection States */
+        ::selection {
+            background-color: var(--primary-color);
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        ::-moz-selection {
+            background-color: var(--primary-color);
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Container improvements */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        
+        /* Responsive grid improvements */
+        .row {
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+        
+        .col-lg-8, .col-lg-4, .col-md-6, .col-md-4, .col-sm-6, .col-12 {
+            padding-left: 15px;
+            padding-right: 15px;
+            margin-bottom: 20px;
+        }
+        
+        /* Chat section responsive layout */
+        @media (max-width: 991px) {
+            .chat-section .col-lg-8 {
+                margin-bottom: 30px;
+            }
+            
+            .chat-section .col-lg-4 {
+                margin-bottom: 20px;
+            }
+        }
+        
+        /* Form responsive improvements */
+        @media (max-width: 767px) {
+            .form-check {
+                margin-bottom: 10px;
+            }
+            
+            .form-check-label {
+                display: block;
+                width: 100%;
+                text-align: left;
+            }
+            
+            .form-row .col-6 {
+                margin-bottom: 15px;
+            }
+        }
+        
+        /* Card responsive spacing */
+        @media (max-width: 767px) {
+            .card {
+                margin-bottom: 20px;
+            }
+            
+            .card-body {
+                padding: 1.2rem;
+            }
+        }
+        
+        /* Button responsive improvements */
+        @media (max-width: 575px) {
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .btn-group .btn {
+                width: auto;
+                margin-bottom: 0;
+            }
+        }
+
+        /* Section spacing */
+        section {
+            position: relative;
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(30, 58, 42, 0.2), transparent);
+        }
+
+        /* Import Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        /* Enhanced Navigation */
+        .navbar {
+            backdrop-filter: blur(20px);
+            background: rgba(15, 23, 42, 0.95) !important;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-scrolled {
+            background: rgba(15, 23, 42, 0.98) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .navbar-brand:hover {
+            opacity: 0.8;
+        }
+
+        .brand-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .brand-main {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: block;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .brand-sub {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-top: -2px;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            color: var(--text-primary) !important;
+            border-radius: 8px;
+            margin: 0 4px;
+            padding: 8px 16px !important;
+        }
+
+        .nav-link:hover {
+            background-color: var(--bg-card);
+            color: var(--text-primary) !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+            font-weight: 700;
+        }
+
+        .nav-link:hover i {
+            color: var(--text-primary);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Add padding to body to account for fixed navbar */
+        body {
+            padding-top: 80px;
+        }
+
+        /* Section Headers */
+        .section-header {
+            position: relative;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .section-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+        }
+
+        /* Improved section spacing */
+        section {
+            position: relative;
+            z-index: 1;
+        }
+
+        section:nth-child(even) {
+            background: var(--bg-dark);
+        }
+
+        section:nth-child(odd) {
+            background: var(--bg-darker);
+        }
+
+        /* Card improvements */
+        .card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+        }
+
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+            border: none;
+            padding: 1.5rem;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        /* Footer Enhancements */
+        .footer-brand h5 {
+            font-weight: 700;
+        }
+
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: var(--primary-color);
+            color: white !important;
+        }
+
+        .footer-brand ul li {
+            margin-bottom: 8px;
+        }
+
+
+        .footer-brand ul li a:hover {
+            color: var(--secondary-color) !important;
+        }
+
+        .contact-info p {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .contact-info i {
+            width: 20px;
+            color: var(--secondary-color);
+        }
+
+        /* Enhanced Visual Design Improvements */
+        .hero-section {
+            background: var(--gradient-hero);
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 100px 0 60px;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+            letter-spacing: -0.02em;
+            font-family: 'Inter', sans-serif;
+            text-rendering: optimizeLegibility;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            line-height: 1.6;
+            letter-spacing: 0.01em;
+            font-family: 'Inter', sans-serif;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        .hero-image img {
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        /* Enhanced Card Designs */
+        .card {
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            background: var(--gradient-card);
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            background: var(--bg-card-hover);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 1.1rem;
+            letter-spacing: 0.02em;
+        }
+
+        .card-body {
+            padding: 2rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            line-height: 1.8;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Interactive Elements - Simplified */
+        .interactive-card {
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Form Styling */
+        .form-check-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            background: var(--gradient-card);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 1.05rem;
+            letter-spacing: 0.01em;
+        }
+
+        .form-check-label:hover {
+            background-color: var(--bg-card-hover);
+            border-color: var(--primary-color);
+            color: var(--text-primary);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+            font-weight: 800;
+        }
+
+        .form-check-input:checked + .form-check-label {
+            background: var(--gradient-primary);
+            color: white !important;
+            font-weight: 800;
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-lg);
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+        }
+
+        .form-range {
+            height: 8px;
+        }
+
+        .form-range::-webkit-slider-thumb {
+            background-color: var(--primary-color);
+            border: 2px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .form-range::-moz-range-thumb {
+            background-color: var(--primary-color);
+            border: 2px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .form-select, .form-control {
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            font-weight: 700;
+            color: var(--text-primary);
+            background-color: var(--bg-card);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 1.05rem;
+            letter-spacing: 0.01em;
+        }
+
+        .form-select:focus, .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.4);
+            background-color: var(--bg-card-hover);
+            color: var(--text-primary) !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+            font-weight: 700;
+        }
+
+        /* Enhanced Button Styles */
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #1d4ed8, #5b21b6);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-warning {
+            background: var(--gradient-secondary);
+            border: none;
+            color: white;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-warning::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-warning:hover::before {
+            left: 100%;
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(45deg, #d97706, #b91c1c);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-outline-light:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        .btn-outline-primary {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background-color: transparent;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Itinerary Cards */
+        .itinerary-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .day-header {
+            background: linear-gradient(45deg, var(--primary-color), var(--success-color));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .day-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .day-content {
+            padding: 25px;
+        }
+
+        .spot-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .spot-card:hover {
+            background: #e9ecef;
+            border-left-color: var(--success-color);
+        }
+
+        .spot-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .spot-location {
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .spot-description {
+            color: #6c757d;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .spot-details {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+
+        .detail-item i {
+            color: var(--primary-color);
+        }
+
+        .eco-score {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(45deg, var(--success-color), #2a9d8f);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .cost-summary {
+            background: linear-gradient(45deg, var(--warning-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .cost-summary h4 {
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+
+        .total-cost {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        /* Enhanced Chat Section */
+        .chat-messages {
+            height: 450px;
+            overflow-y: auto;
+            padding: 20px;
+            background: var(--gradient-chat);
+            scroll-behavior: smooth;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .chat-messages::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            border-radius: 12px;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: var(--darker-color);
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .user-message {
+            justify-content: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .bot-message {
+            justify-content: flex-start;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            flex-shrink: 0;
+        }
+
+        .bot-message .message-avatar {
+            background: linear-gradient(45deg, var(--primary-color), var(--success-color));
+            color: white;
+        }
+
+        .user-message .message-avatar {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+            color: white;
+        }
+
+        .message-content {
+            max-width: 70%;
+            min-width: 200px;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+
+        .sender-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .message-time {
+            color: #6c757d;
+            font-size: 0.75rem;
+        }
+
+        .message-text {
+            padding: 18px 22px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            line-height: 1.7;
+            box-shadow: var(--shadow-lg);
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: 0.01em;
+        }
+
+        .user-message .message-text {
+            background: var(--gradient-primary);
+            color: white;
+            border-bottom-right-radius: 5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            font-weight: 700;
+        }
+
+        .bot-message .message-text {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-bottom-left-radius: 5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            font-weight: 700;
+        }
+
+        .chat-controls {
+            display: flex;
+            gap: 5px;
+        }
+
+        .chat-controls .btn {
+            width: 35px;
+            height: 35px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .chat-input {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .chat-input .form-control {
+            border-radius: 25px;
+            padding: 12px 20px;
+            border: 2px solid var(--border-color);
+            font-weight: 600;
+            color: var(--text-primary);
+            background-color: var(--bg-card);
+        }
+
+        .chat-input .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.4);
+            background-color: var(--bg-card-hover);
+        }
+
+        .chat-input .btn {
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-input .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+
+        /* Help Panel Styles */
+        .help-categories {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .help-category h6 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .help-items {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .help-item {
+            background: var(--gradient-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 20px;
+            text-align: left;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.01em;
+        }
+
+        .help-item:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--primary-color);
+            color: var(--text-primary) !important;
+            box-shadow: var(--shadow-lg);
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.8);
+            font-weight: 800;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--success-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Typing indicator */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            background: white;
+            border-radius: 18px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 3px;
+        }
+
+        .typing-dots span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Accommodation Card Enhancements */
+        .accommodation-item {
+            border: 1px solid #e9ecef;
+        }
+
+        .accommodation-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-color: var(--primary-color);
+        }
+
+        .rating-badge {
+            background: rgba(255, 193, 7, 0.1);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .nearby-attractions {
+            background: rgba(30, 58, 42, 0.05);
+            padding: 6px 10px;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .distance-info {
+            background: rgba(13, 110, 253, 0.05);
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 4px;
+        }
+
+        .price-info {
+            text-align: right;
+        }
+
+        .accommodation-badges .badge {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+        }
+
+        .accommodation-badges .bg-success {
+            background-color: var(--success-color) !important;
+        }
+
+        .accommodation-badges .bg-primary {
+            background-color: var(--primary-color) !important;
+        }
+
+        .accommodation-badges .bg-warning {
+            background-color: var(--warning-color) !important;
+        }
+
+        /* Enhanced Responsive Design */
+        
+        /* Large screens (1200px and up) */
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1400px;
+            }
+            
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.6rem;
+            }
+            
+            .card-body {
+                padding: 2.5rem;
+            }
+            
+            .chat-messages {
+                height: 500px;
+            }
+        }
+
+        /* Desktop screens (992px to 1199px) */
+        @media (min-width: 992px) and (max-width: 1199px) {
+            .container {
+                max-width: 960px;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* Tablet screens (768px to 991px) */
+        @media (min-width: 768px) and (max-width: 991px) {
+            .container {
+                max-width: 720px;
+            }
+            
+            .hero-section {
+                padding: 100px 0 60px;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+            }
+            
+            .hero-subtitle {
+                font-size: 1.3rem;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+            }
+            
+            .section-header h2 {
+                font-size: 2.5rem;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            
+            .card-body {
+                padding: 1.8rem;
+            }
+            
+            .chat-messages {
+                height: 400px;
+            }
+            
+            .message-content {
+                max-width: 80%;
+            }
+            
+            .form-check-label {
+                font-size: 1.05rem;
+                padding: 14px 18px;
+                margin-bottom: 8px;
+            }
+            
+            .help-item {
+                font-size: 0.95rem;
+                padding: 14px 18px;
+                margin-bottom: 6px;
+            }
+            
+            .message-text {
+                font-size: 1.05rem;
+                padding: 16px 20px;
+            }
+        }
+
+        /* Mobile screens (576px to 767px) */
+        @media (min-width: 576px) and (max-width: 767px) {
+            .container {
+                max-width: 540px;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+            
+            .navbar {
+                padding: 0.5rem 0;
+            }
+            
+            .navbar-brand {
+                font-size: 0.9rem;
+            }
+            
+            .brand-main {
+                font-size: 0.9rem;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            
+            .brand-sub {
+                font-size: 0.65rem;
+            }
+            
+            .hero-section {
+                padding: 80px 0 40px;
+                min-height: 85vh;
+                text-align: center;
+            }
+            
+            .hero-content {
+                padding: 0 20px;
+            }
+            
+            .hero-image {
+                margin-top: 30px;
+            }
+            
+            .hero-title {
+                font-size: 1.8rem;
+                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+                margin-bottom: 1rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+                margin-bottom: 1.5rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+            }
+            
+            .hero-buttons .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            
+            .card-body {
+                padding: 1.5rem;
+            }
+            
+            .chat-messages {
+                height: 350px;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+            
+            .form-check-label {
+                font-size: 1rem;
+                padding: 12px 16px;
+                margin-bottom: 8px;
+            }
+            
+            .help-item {
+                font-size: 0.9rem;
+                padding: 12px 16px;
+                margin-bottom: 6px;
+            }
+            
+            .message-text {
+                font-size: 1rem;
+                padding: 14px 18px;
+            }
+            
+            .help-categories {
+                max-height: 300px;
+            }
+            
+            .accommodation-item .col-md-4 {
+                text-align: left !important;
+                margin-top: 10px;
+            }
+            
+            .price-info {
+                text-align: left !important;
+            }
+            
+            .footer-brand,
+            .footer-brand ul,
+            .contact-info {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            
+            .social-links {
+                justify-content: center;
+                display: flex;
+                margin-top: 15px;
+            }
+        }
+
+        /* Small mobile screens (below 576px) */
+        @media (max-width: 575px) {
+            .container {
+                max-width: 100%;
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            .navbar {
+                padding: 0.4rem 0;
+            }
+            
+            .navbar-brand {
+                font-size: 0.8rem;
+            }
+            
+            .brand-main {
+                font-size: 0.8rem;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            
+            .brand-sub {
+                font-size: 0.6rem;
+            }
+            
+            .hero-section {
+                padding: 60px 0 30px;
+                min-height: 80vh;
+                text-align: center;
+            }
+            
+            .hero-content {
+                padding: 0 15px;
+            }
+            
+            .hero-image {
+                margin-top: 25px;
+            }
+            
+            .hero-title {
+                font-size: 1.5rem;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+                margin-bottom: 1rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+                margin-bottom: 1.2rem;
+                line-height: 1.5;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                gap: 12px;
+                align-items: center;
+            }
+            
+            .hero-buttons .btn {
+                width: 100%;
+                max-width: 280px;
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.75rem;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+                margin-bottom: 1rem;
+            }
+            
+            .section-header p {
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .card-body {
+                padding: 1.2rem;
+            }
+            
+            .chat-messages {
+                height: 300px;
+            }
+            
+            .message-content {
+                max-width: 90%;
+            }
+            
+            .form-check-label {
+                font-size: 0.95rem;
+                padding: 10px 14px;
+                margin-bottom: 6px;
+            }
+
+            .help-item {
+                font-size: 0.85rem;
+                padding: 10px 14px;
+                margin-bottom: 4px;
+            }
+
+            .message-text {
+                font-size: 0.95rem;
+                padding: 12px 16px;
+            }
+            
+            .help-categories {
+                max-height: 250px;
+            }
+            
+            .form-check {
+                margin-bottom: 8px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .footer-brand,
+            .footer-brand ul,
+            .contact-info {
+                text-align: center;
+                margin-bottom: 15px;
+            }
+            
+            .social-links {
+                justify-content: center;
+                display: flex;
+                margin-top: 10px;
+            }
+            
+            .navbar-toggler {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Scroll to top button */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .scroll-to-top:hover {
+            background: var(--secondary-color);
+        }
+
+        .scroll-to-top.show {
+            display: flex;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-section {
+                text-align: center;
+                padding: 50px 0;
+            }
+            
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+            
+            .spot-details {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+            
+            .chat-messages {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .day-content {
+                padding: 20px;
+            }
+            
+            .spot-card {
+                padding: 15px;
+            }
+        }
+
+        /* Utility Classes */
+        .text-purple {
+            color: #6f42c1 !important;
+        }
+
+        .bg-gradient-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--success-color));
+        }
+
+        .shadow-lg {
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Scroll Animation Classes */
+        .animate-in {
+            animation: slideInFromBottom 0.6s ease-out forwards;
+        }
+
+        @keyframes slideInFromBottom {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Enhanced Loading States */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Enhanced Form Elements */
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(30, 58, 42, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* Enhanced Visual Feedback */
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+        }
+
+        .form-check-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+        }
+
+        /* Enhanced Loading States */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Enhanced Success/Error States */
+        .alert {
+            border-radius: 12px;
+            border: none;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+            border-left: 4px solid var(--success-color);
+            color: var(--text-primary);
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+            border-left: 4px solid var(--accent-color);
+            color: var(--text-primary);
+        }
+
+
+
+        /* Enhanced Chat Input */
+        .chat-input .form-control {
+            resize: none;
+            min-height: 40px;
+            max-height: 120px;
+        }
+
+        /* Performance Optimizations */
+        .btn {
+            will-change: background-color;
+        }
+        
+        /* Accessibility Improvements */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        /* Focus indicators */
+        .btn:focus,
+        .form-control:focus,
+        .form-check-input:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+        
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .card {
+                border: 2px solid var(--primary-color);
+            }
+            
+            .btn {
+                border-width: 2px;
+            }
+        }
+        
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            .navbar, .scroll-to-top, .page-loader {
+                display: none !important;
+            }
+            
+            .card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Loader - Only shows once on page load -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-content">
+            <div class="loader-logo">
+                <i class="fas fa-mountain-sun"></i>
+            </div>
+            <h1 class="loader-title">Jharkhand Tourism</h1>
+            <p class="loader-subtitle">Smart Digital Platform</p>
+            <div class="loader-spinner"></div>
+            <div class="loader-progress">
+                <div class="loader-progress-bar"></div>
+            </div>
+            <div class="loader-text">Loading your journey...</div>
+        </div>
+    </div>
+
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="sr-only sr-only-focusable btn btn-primary position-absolute" style="top: 10px; left: 10px; z-index: 10000;">
+        Skip to main content
+    </a>
+
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow-lg">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#home">
+                <div class="brand-icon me-2">
+                    <i class="fas fa-mountain-sun"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-main">Jharkhand Tourism</span>
+                    <small class="brand-sub d-block">Smart Digital Platform</small>
+                </div>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="#home">
+                            <i class="fas fa-home me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="#recommend">
+                            <i class="fas fa-route me-1"></i> Plan Trip
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="#chatbot">
+                            <i class="fas fa-robot me-1"></i> AI Assistant
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="#statistics">
+                            <i class="fas fa-chart-bar me-1"></i> Statistics
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="#results">
+                            <i class="fas fa-list me-1"></i> Results
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section" role="main" aria-label="Main content">
+        <div class="container" id="main-content">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1 class="hero-title">
+                            Discover the Hidden Treasures of <span class="text-warning">Jharkhand</span>
+                        </h1>
+                        <p class="hero-subtitle">
+                            Experience the beauty of nature, rich tribal culture, and eco-friendly tourism destinations 
+                            with our smart recommendation platform.
+                        </p>
+                        <div class="hero-buttons d-flex gap-3">
+                            <a href="#recommend" class="btn btn-warning btn-lg" aria-label="Start planning your trip to Jharkhand">
+                                <i class="fas fa-route me-2" aria-hidden="true"></i>Plan Your Trip
+                            </a>
+                            <a href="#chatbot" class="btn btn-outline-light btn-lg" aria-label="Ask questions about Jharkhand tourism">
+                                <i class="fas fa-robot me-2" aria-hidden="true"></i>Ask Questions
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-image">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                             alt="Jharkhand Tourism" class="img-fluid rounded shadow">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Dashboard -->
+    <section id="statistics" class="py-5" style="background: var(--bg-dark);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="text-center mb-5">
+                        <div class="section-header">
+                            <h2 class="display-5 fw-bold mb-3" style="color: var(--text-primary); text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);">Tourism Statistics</h2>
+                            <p class="lead mb-4" style="color: var(--text-secondary); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">Discover Jharkhand's tourism potential through data</p>
+                            <div class="section-divider mx-auto mb-4"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <!-- Tourist Spots by Category -->
+                        <div class="col-lg-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-chart-pie me-2"></i>Tourist Spots by Category
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="categoryChart" width="400" height="300"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Budget Distribution -->
+                        <div class="col-lg-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-chart-bar me-2"></i>Budget Distribution
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="budgetChart" width="400" height="300"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Eco-Friendly Score -->
+                        <div class="col-lg-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-warning text-white">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-leaf me-2"></i>Eco-Friendly Score Distribution
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="ecoScoreChart" width="400" height="300"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Regional Distribution -->
+                        <div class="col-lg-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-map-marked-alt me-2"></i>Regional Distribution
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="regionChart" width="400" height="300"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommendation Section -->
+    <section id="recommend" class="py-5" style="background: var(--bg-darker);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="text-center mb-5">
+                        <div class="section-header">
+                            <h2 class="display-5 fw-bold mb-3" style="color: var(--text-primary); text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);">Smart Trip Planner</h2>
+                            <p class="lead mb-4" style="color: var(--text-secondary); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">Tell us your preferences and get personalized recommendations</p>
+                            <div class="section-divider mx-auto mb-4"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card shadow-lg">
+                        <div class="card-body p-4">
+                            <form id="tripForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">Your Interests</label>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="nature" id="nature">
+                                                    <label class="form-check-label" for="nature">
+                                                        <i class="fas fa-leaf text-success"></i> Nature
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="culture" id="culture">
+                                                    <label class="form-check-label" for="culture">
+                                                        <i class="fas fa-theater-masks text-primary"></i> Culture
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="adventure" id="adventure">
+                                                    <label class="form-check-label" for="adventure">
+                                                        <i class="fas fa-hiking text-danger"></i> Adventure
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="heritage" id="heritage">
+                                                    <label class="form-check-label" for="heritage">
+                                                        <i class="fas fa-monument text-warning"></i> Heritage
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="wildlife" id="wildlife">
+                                                    <label class="form-check-label" for="wildlife">
+                                                        <i class="fas fa-paw text-info"></i> Wildlife
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="religious" id="religious">
+                                                    <label class="form-check-label" for="religious">
+                                                        <i class="fas fa-om text-purple"></i> Religious
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="budget" class="form-label fw-bold">Budget (₹)</label>
+                                        <input type="range" class="form-range" min="1000" max="50000" value="10000" id="budget">
+                                        <div class="d-flex justify-content-between">
+                                            <small>₹1,000</small>
+                                            <small id="budgetValue">₹10,000</small>
+                                            <small>₹50,000</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="duration" class="form-label fw-bold">Duration (Days)</label>
+                                        <select class="form-select" id="duration">
+                                            <option value="1">1 Day</option>
+                                            <option value="2">2 Days</option>
+                                            <option value="3" selected>3 Days</option>
+                                            <option value="5">5 Days</option>
+                                            <option value="7">1 Week</option>
+                                            <option value="10">10 Days</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="region" class="form-label fw-bold">Preferred Region (Optional)</label>
+                                        <select class="form-select" id="region">
+                                            <option value="">Any Region</option>
+                                            <option value="Ranchi">Ranchi</option>
+                                            <option value="Jamshedpur">Jamshedpur</option>
+                                            <option value="Dhanbad">Dhanbad</option>
+                                            <option value="Deoghar">Deoghar</option>
+                                            <option value="Hazaribagh">Hazaribagh</option>
+                                            <option value="Palamu">Palamu</option>
+                                            <option value="Latehar">Latehar</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                                        <i class="fas fa-search"></i> Get Recommendations
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="py-5" style="display: none; background: var(--bg-dark);">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-center mb-5">
+                        <h2 class="display-5 fw-bold" style="color: var(--text-primary); text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);">Your Personalized Itinerary</h2>
+                        <p class="lead" style="color: var(--text-secondary); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">Based on your preferences</p>
+                    </div>
+                    
+                    <div id="itineraryResults" class="row">
+                        <!-- Results will be populated here -->
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button id="newSearch" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-redo"></i> Plan Another Trip
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot Section -->
+    <section id="chatbot" class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="text-center mb-5">
+                        <div class="section-header">
+                            <h2 class="display-5 fw-bold mb-3" style="color: var(--text-primary); text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);">AI Assistant</h2>
+                            <p class="lead mb-4" style="color: var(--text-secondary); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">Ask me anything - I can help with any topic!</p>
+                            <div class="section-divider mx-auto mb-4"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Chat Interface -->
+                        <div class="col-lg-8">
+                            <div class="card shadow-lg h-100">
+                                <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar me-3">
+                                            <i class="fas fa-robot fa-lg"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="mb-0">AI Assistant</h5>
+                                            <small class="text-light opacity-75">Online • Ready to help with anything</small>
+                                        </div>
+                                    </div>
+                                    <div class="chat-controls">
+                                        <button id="clearChat" class="btn btn-outline-light btn-sm" title="Clear Chat">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <button id="minimizeChat" class="btn btn-outline-light btn-sm" title="Minimize">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-body d-flex flex-column p-0">
+                                    <div id="chatMessages" class="chat-messages flex-grow-1">
+                                        <div class="message bot-message">
+                                            <div class="message-avatar">
+                                                <i class="fas fa-robot"></i>
+                                            </div>
+                                            <div class="message-content">
+                                                <div class="message-header">
+                                                    <span class="sender-name">Tourism Assistant</span>
+                                                    <span class="message-time">Just now</span>
+                                                </div>
+                                                <div class="message-text">
+                                                    Hello! I'm your AI assistant. I can help you with any topic - from general knowledge and science to travel planning, problem-solving, creative writing, and much more! What would you like to know?
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="chat-input p-3 border-top bg-light">
+                                        <div class="input-group">
+                                            <input type="text" id="chatInput" class="form-control" placeholder="Ask me anything..." autocomplete="off">
+                                            <button id="sendMessage" class="btn btn-primary" disabled>
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Help Panel -->
+                        <div class="col-lg-4">
+                            <div class="card shadow-lg h-100">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-lightbulb"></i> Quick Topics
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="help-categories">
+                                        <div class="help-category mb-3">
+                                            <h6 class="text-primary">
+                                                <i class="fas fa-brain"></i> General Knowledge
+                                            </h6>
+                                            <div class="help-items">
+                                                <button class="help-item" data-topic="science">Science & Technology</button>
+                                                <button class="help-item" data-topic="history">History & Culture</button>
+                                                <button class="help-item" data-topic="math">Mathematics</button>
+                                                <button class="help-item" data-topic="current-events">Current Events</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="help-category mb-3">
+                                            <h6 class="text-success">
+                                                <i class="fas fa-map-marker-alt"></i> Travel & Tourism
+                                            </h6>
+                                            <div class="help-items">
+                                                <button class="help-item" data-place="hundru">Hundru Falls</button>
+                                                <button class="help-item" data-place="betla">Betla National Park</button>
+                                                <button class="help-item" data-question="best-time">Best time to visit?</button>
+                                                <button class="help-item" data-question="budget">Budget planning?</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="help-category">
+                                            <h6 class="text-warning">
+                                                <i class="fas fa-lightbulb"></i> Creative & Problem Solving
+                                            </h6>
+                                            <div class="help-items">
+                                                <button class="help-item" data-topic="writing">Creative Writing</button>
+                                                <button class="help-item" data-topic="coding">Programming Help</button>
+                                                <button class="help-item" data-topic="advice">Life Advice</button>
+                                                <button class="help-item" data-topic="brainstorm">Brainstorming</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-5" style="background: var(--darker-color) !important; color: var(--text-primary) !important;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="footer-brand">
+                        <h5 class="text-primary mb-3">
+                            <i class="fas fa-mountain-sun me-2"></i>
+                            Jharkhand Tourism
+                        </h5>
+                        <p class="text-light opacity-75 mb-3">
+                            Discover the beauty of Jharkhand with our smart tourism platform. 
+                            Experience eco-friendly and cultural tourism like never before.
+                        </p>
+                        <div class="social-links">
+                            <a href="#" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="text-light me-3"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-light me-3"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="text-light"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#home" class="text-light opacity-75 text-decoration-none">Home</a></li>
+                        <li><a href="#recommend" class="text-light opacity-75 text-decoration-none">Plan Trip</a></li>
+                        <li><a href="#chatbot" class="text-light opacity-75 text-decoration-none">AI Assistant</a></li>
+                        <li><a href="#results" class="text-light opacity-75 text-decoration-none">Results</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h6 class="text-primary mb-3">Tourism Info</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light opacity-75 text-decoration-none">Best Time to Visit</a></li>
+                        <li><a href="#" class="text-light opacity-75 text-decoration-none">Popular Destinations</a></li>
+                        <li><a href="#" class="text-light opacity-75 text-decoration-none">Cultural Events</a></li>
+                        <li><a href="#" class="text-light opacity-75 text-decoration-none">Adventure Activities</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 mb-4">
+                    <h6 class="text-primary mb-3">Contact Info</h6>
+                    <div class="contact-info">
+                        <p class="text-light opacity-75 mb-2">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            Ranchi, Jharkhand, India
+                        </p>
+                        <p class="text-light opacity-75 mb-2">
+                            <i class="fas fa-phone me-2"></i>
+                            +91 123 456 7890
+                        </p>
+                        <p class="text-light opacity-75 mb-2">
+                            <i class="fas fa-envelope me-2"></i>
+                            info@jharkhandtourism.com
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4" style="border-color: rgba(255,255,255,0.2);">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 text-light opacity-75">
+                        &copy; 2024 Smart Tourism Platform. Built for SIH Hackathon.
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0 text-light opacity-75">
+                        Made with <i class="fas fa-heart text-danger"></i> for Jharkhand Tourism
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTop" title="Scroll to Top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./SIH/data.js"></script>
+    <script src="./SIH/demo.js"></script>
+    
+    <!-- Additional Enhancement Scripts -->
+    <script>
+        // Page Load Animation - Only happens once
+        document.addEventListener('DOMContentLoaded', function() {
+            const pageLoader = document.getElementById('pageLoader');
+            
+            // Simulate loading process with realistic timing
+            const loadingSteps = [
+                { text: 'Initializing platform...', delay: 500 },
+                { text: 'Loading tourism data...', delay: 1000 },
+                { text: 'Preparing AI assistant...', delay: 800 },
+                { text: 'Setting up interactive features...', delay: 700 },
+                { text: 'Almost ready...', delay: 500 }
+            ];
+            
+            let currentStep = 0;
+            const loaderText = document.querySelector('.loader-text');
+            
+            function updateLoadingText() {
+                if (currentStep < loadingSteps.length) {
+                    loaderText.textContent = loadingSteps[currentStep].text;
+                    currentStep++;
+                    setTimeout(updateLoadingText, loadingSteps[currentStep - 1].delay);
+                } else {
+                    // Hide loader after all steps complete
+                    setTimeout(() => {
+                        pageLoader.classList.add('hidden');
+                        // Remove loader from DOM after animation completes
+                        setTimeout(() => {
+                            pageLoader.remove();
+                        }, 800);
+                    }, 500);
+                }
+            }
+            
+            // Start loading sequence
+            setTimeout(updateLoadingText, 300);
+            
+            // Initialize the application after loader
+            setTimeout(() => {
+                initializeApp();
+            }, 3500);
+        });
+        
+        // Enhanced Application Initialization
+        function initializeApp() {
+            // Setup budget slider
+            setupBudgetSlider();
+            
+            // Setup form submission
+            setupTripForm();
+            
+            // Setup chatbot
+            setupChatbot();
+            setupEnhancedChatbot();
+            
+            // Setup smooth scrolling
+            setupSmoothScrolling();
+            
+            // Setup scroll to top
+            setupScrollToTop();
+            
+            // Setup navbar scroll effect
+            setupNavbarScroll();
+            
+            // Setup intersection observer for animations
+            setupScrollAnimations();
+            
+            // Setup data visualization
+            setupDataVisualization();
+            
+            // Add sample questions to chatbot
+            setTimeout(addSampleQuestions, 1000);
+            
+            // Add entrance animations to main content
+            addEntranceAnimations();
+            
+            // Add enhanced visual effects
+            addEnhancedVisualEffects();
+        }
+        
+        // Add entrance animations to main content
+        function addEntranceAnimations() {
+            const sections = document.querySelectorAll('section');
+            sections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(30px)';
+                section.style.transition = `all 0.6s ease ${index * 0.1}s`;
+                
+                setTimeout(() => {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, 100 + (index * 100));
+            });
+        }
+        
+        // Add enhanced visual effects
+        function addEnhancedVisualEffects() {
+            // Add subtle animations to cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = `all 0.5s ease ${index * 0.1}s`;
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 200 + (index * 50));
+            });
+            
+            // Add hover effects to buttons
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        }
+    </script>
+</body>
+</html>
